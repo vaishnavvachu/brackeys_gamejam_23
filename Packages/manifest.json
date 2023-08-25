@@ -7,6 +7,7 @@
     "com.sgaumin.audioexpress": "https://github.com/sgaumin/AudioExpress.git",
     "com.sgaumin.linkexpress": "https://github.com/sgaumin/LinkExpress.git",
     "com.sgaumin.routineexpress": "https://github.com/sgaumin/RoutineExpress.git",
+    "com.unity.2d.pixel-perfect": "5.0.3",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.2d.tilemap.extras": "3.1.0",

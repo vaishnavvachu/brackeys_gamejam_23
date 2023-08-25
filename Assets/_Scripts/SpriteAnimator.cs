@@ -27,6 +27,7 @@ public class SpriteAnimator : MonoBehaviour
 	public Animation currentAnimation { get; private set; }
 	public int currentFrame { get; private set; }
 	public bool loop { get; private set; }
+	private string onCompleteName;
 
 	public string playAnimationOnStart;
 
@@ -48,14 +49,14 @@ public class SpriteAnimator : MonoBehaviour
 		currentAnimation = null;
 	}
 
-	public void Play(string name, bool loop = true, int startFrame = 0)
+	public void Play(string name, string onCompleteName = "", bool loop = true, int startFrame = 0)
 	{
 		Animation animation = GetAnimation(name);
 		if (animation != null )
 		{
 			if (animation != currentAnimation)
 			{
-				ForcePlay(name, loop, startFrame);
+				ForcePlay(name, onCompleteName, loop, startFrame);
 			}
 		}
 		else
@@ -64,7 +65,7 @@ public class SpriteAnimator : MonoBehaviour
 		}
 	}
 
-	public void ForcePlay(string name, bool loop = true, int startFrame = 0)
+	public void ForcePlay(string name, string onCompleteName = "", bool loop = true, int startFrame = 0)
 	{
 		Animation animation = GetAnimation(name);
 		if (animation != null)
@@ -74,6 +75,7 @@ public class SpriteAnimator : MonoBehaviour
 			playing = true;
 			currentFrame = startFrame;
 			spriteRenderer.sprite = animation.frames[currentFrame];
+			this.onCompleteName = onCompleteName;
 			StopAllCoroutines();
 			StartCoroutine(PlayAnimation(currentAnimation));
 		}
@@ -85,11 +87,11 @@ public class SpriteAnimator : MonoBehaviour
 		{
 			if (currentAnimation != null && currentAnimation.name == otherNames[i])
 			{
-				Play(name, true, currentFrame);
+				Play(name, "", true, currentFrame);
 				break;
 			}
 		}
-		Play(name, true, wantFrame);
+		Play(name, "", true, wantFrame);
 	}
 
 	public bool IsPlaying(string name)
@@ -115,7 +117,6 @@ public class SpriteAnimator : MonoBehaviour
 		float delay = 1f / (float)animation.fps;
 		while (loop || currentFrame < animation.frames.Length-1)
 		{
-
 			while (timer < delay)
 			{
 				timer += Time.deltaTime;
@@ -131,6 +132,12 @@ public class SpriteAnimator : MonoBehaviour
 		}
 
 		currentAnimation = null;
+		// HACK
+		if (!string.IsNullOrEmpty(this.onCompleteName))
+		{
+			Play(this.onCompleteName);
+			onCompleteName = "";
+		}
 	}
 
 	void NextFrame(Animation animation)

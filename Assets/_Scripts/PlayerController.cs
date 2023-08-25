@@ -8,24 +8,27 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackRange;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float maxHealth = 100f; 
-    [SerializeField] Slider healthBar;
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private SpriteAnimator spriteAnimator;
+    
     private float _currentHealth; 
     private Rigidbody2D _rb2d;
     
-
     private void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _currentHealth = maxHealth;  // Initialize current health to maximum
-        UpdateHealthBar();
+        
+        // TODO: Needs a health bar
+        // UpdateHealthBar();
     }
 
     private void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
+        var horizontalInput = Input.GetAxis("Horizontal");
+        var verticalInput = Input.GetAxis("Vertical");
 
-        Vector2 movement = new Vector2(horizontalInput, verticalInput) * moveSpeed * Time.deltaTime;
+        var movement = new Vector2(horizontalInput, verticalInput) * moveSpeed * Time.deltaTime;
 
         _rb2d.MovePosition(_rb2d.position + movement);
 
@@ -37,9 +40,11 @@ public class PlayerController : MonoBehaviour
 
     private void SlashAttack()
     {
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
-        foreach (Collider2D enemy in hitEnemies)
+        spriteAnimator.Play(PlayerAnimationNames.Attack.ToString().ToLower(), PlayerAnimationNames.Idle.ToString().ToLower(), false);
+        var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+        foreach (var enemy in hitEnemies)
         {
+            spriteAnimator.Play(PlayerAnimationNames.Attack.ToString().ToLower(), "", false);
             // Handle damaging the enemy here
         }
     }
@@ -47,7 +52,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _currentHealth -= damage;
-        UpdateHealthBar();
+        //UpdateHealthBar();
 
         if (_currentHealth <= 0)
         {
@@ -64,4 +69,12 @@ public class PlayerController : MonoBehaviour
     {
         healthBar.value = _currentHealth / maxHealth;  // Update the health bar's value
     }
+}
+
+public enum PlayerAnimationNames
+{
+    Idle,
+    Attack,
+    TakeDamage,
+    Die
 }

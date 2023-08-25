@@ -51,6 +51,13 @@
       "dependencies": {},
       "hash": "1abe9706b166be0e3d3611d5ba02c971ee1012e4"
     },
+    "com.unity.2d.pixel-perfect": {
+      "version": "5.0.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

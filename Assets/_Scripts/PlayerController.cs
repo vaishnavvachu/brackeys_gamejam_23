@@ -17,7 +17,9 @@ public class PlayerController : MonoBehaviour
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _currentHealth = maxHealth;  // Initialize current health to maximum
-        UpdateHealthBar();
+        
+        // TODO: Needs a health bar
+        // UpdateHealthBar();
     }
 
     private void Update()

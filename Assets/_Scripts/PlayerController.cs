@@ -11,8 +11,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Slider healthBar;
     [SerializeField] private SpriteAnimator spriteAnimator;
     
-    private float _currentHealth; 
+    private float _currentHealth;
     private Rigidbody2D _rb2d;
+
+    private string attackAnimationName = PlayerAnimationNames.Attack.ToString();
+    private string idleAnimationName = PlayerAnimationNames.Idle.ToString();
+    private string takeDamageAnimationName = PlayerAnimationNames.TakeDamage.ToString();
+    private string dieAnimationName = PlayerAnimationNames.Die.ToString();
     
     private void Start()
     {
@@ -40,11 +45,10 @@ public class PlayerController : MonoBehaviour
 
     private void SlashAttack()
     {
-        spriteAnimator.Play(PlayerAnimationNames.Attack.ToString().ToLower(), PlayerAnimationNames.Idle.ToString().ToLower(), false);
         var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         foreach (var enemy in hitEnemies)
         {
-            spriteAnimator.Play(PlayerAnimationNames.Attack.ToString().ToLower(), "", false);
+            spriteAnimator.Play(attackAnimationName, idleAnimationName, false);
             // Handle damaging the enemy here
         }
     }
@@ -52,6 +56,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         _currentHealth -= damage;
+        spriteAnimator.Play(takeDamageAnimationName, idleAnimationName, false);
         //UpdateHealthBar();
 
         if (_currentHealth <= 0)
@@ -62,6 +67,7 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
+        spriteAnimator.Play(dieAnimationName, "", false);
         // Handle player's death here
     }
 

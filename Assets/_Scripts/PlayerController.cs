@@ -10,9 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxHealth = 100f; 
     [SerializeField] private Slider healthBar;
     [SerializeField] private SpriteAnimator spriteAnimator;
-    
+
+    private Camera _mainCamera;
     private float _currentHealth;
     private Rigidbody2D _rb2d;
+    private Vector3 _initialAttackPointPosition;
 
     private string attackAnimationName = PlayerAnimationNames.Attack.ToString();
     private string idleAnimationName = PlayerAnimationNames.Idle.ToString();
@@ -21,9 +23,11 @@ public class PlayerController : MonoBehaviour
     
     private void Start()
     {
+        _mainCamera = Camera.main;
         _rb2d = GetComponent<Rigidbody2D>();
         _currentHealth = maxHealth;  // Initialize current health to maximum
-        
+
+        _initialAttackPointPosition = attackPoint.position;
         // TODO: Needs a health bar
         // UpdateHealthBar();
     }
@@ -37,10 +41,19 @@ public class PlayerController : MonoBehaviour
 
         _rb2d.MovePosition(_rb2d.position + movement);
 
+        // Input
         if (Input.GetKeyDown(KeyCode.J))
         {
             SlashAttack();
         }
+
+        // Mouse Input
+        var position = transform.position;
+        var orbVector = Input.mousePosition - _mainCamera.WorldToScreenPoint(position);
+        var angle = Mathf.Atan2(orbVector.y, orbVector.x) * Mathf.Rad2Deg;
+ 
+        attackPoint.position = position;
+        attackPoint.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
     }
 
     private void SlashAttack()

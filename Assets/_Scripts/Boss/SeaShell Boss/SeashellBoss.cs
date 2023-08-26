@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SeashellBoss : MonoBehaviour
@@ -14,6 +15,7 @@ public class SeashellBoss : MonoBehaviour
     public float shootInterval = 2.0f;
     private float nextShootTime;
     public int projectileSpeed;
+    private ObjectPool pearlObjectPool;
 
     // Boss health
     [SerializeField] private float maxHealth = 100f;
@@ -28,6 +30,8 @@ public class SeashellBoss : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         originalY = transform.position.y;
         currentHealth = maxHealth;
+        nextShootTime = Time.time + shootInterval;
+        pearlObjectPool = ObjectPool.instance; // Replace "PearlObjectPool" with your actual object pool script name
         nextShootTime = Time.time + shootInterval;
     }
 
@@ -54,10 +58,32 @@ public class SeashellBoss : MonoBehaviour
 
     private void ShootPearl()
     {
-        Vector3 directionToPlayer = (player.position - shootPoint.position).normalized;
-        GameObject newPearl = Instantiate(pearlPrefab, shootPoint.position, Quaternion.identity);
-        Rigidbody2D pearlRigidbody = newPearl.GetComponent<Rigidbody2D>();
-        pearlRigidbody.velocity = directionToPlayer * projectileSpeed;
+        bossAnimator.SetBool("Fire", true);
+        if (pearlObjectPool == null)
+        {
+            Debug.LogError("Pearl Object Pool is not assigned!");
+            return;
+        }
+
+        GameObject newPearl = pearlObjectPool.GetObjectFromPool(); // Get a pearl from the object pool
+
+        if (newPearl != null)
+        {
+            newPearl.transform.position = shootPoint.position;
+            Vector3 directionToPlayer = (player.position - shootPoint.position).normalized;
+            Rigidbody2D pearlRigidbody = newPearl.GetComponent<Rigidbody2D>();
+            pearlRigidbody.velocity = directionToPlayer * projectileSpeed;
+
+            // Start the coroutine to return the pearl to the pool after a delay
+            StartCoroutine(ReturnPearlToPoolAfterDelay(newPearl));
+        }
+    }
+
+    private IEnumerator ReturnPearlToPoolAfterDelay(GameObject pearl)
+    {
+        yield return new WaitForSeconds(3.0f);
+        bossAnimator.SetBool("Fire", false);
+        pearlObjectPool.ReturnObjectToPool(pearl); // Return the pearl to the pool
     }
 
     public void TakeDamage(int damage)

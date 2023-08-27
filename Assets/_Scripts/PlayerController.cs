@@ -10,7 +10,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxHealth = 100f; 
     [SerializeField] private Slider healthBar;
     [SerializeField] private SpriteAnimator spriteAnimator;
-    
+
+    //Damae System
+    [SerializeField] private int pearlDamage;
+    [SerializeField] private int slashDamage;
+    [SerializeField] private int enemyDamage;
+
+    private ObjectPool pearlObjectPool;
+
     private float _currentHealth;
     private Rigidbody2D _rb2d;
 
@@ -23,7 +30,8 @@ public class PlayerController : MonoBehaviour
     {
         _rb2d = GetComponent<Rigidbody2D>();
         _currentHealth = maxHealth;  // Initialize current health to maximum
-        
+        pearlObjectPool = ObjectPool.instance;
+
         // TODO: Needs a health bar
         // UpdateHealthBar();
     }
@@ -49,7 +57,23 @@ public class PlayerController : MonoBehaviour
         var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         foreach (var enemy in hitEnemies)
         {
-            // Handle damaging the enemy here
+            Debug.Log("boss damage");
+            if (enemy.CompareTag("Boss")) // Assuming you have a tag for the boss
+            {
+                SeashellBoss boss = enemy.GetComponent<SeashellBoss>();
+                if (boss != null)
+                {
+                    boss.TakeDamage(slashDamage);
+                }
+            }
+            if (enemy.CompareTag("Enemy"))
+            {
+                EnemyController enemys = enemy.GetComponent<EnemyController>();
+                if (enemys != null)
+                {
+                    enemys.TakeDamage(slashDamage);
+                }
+            }
         }
     }
 
@@ -75,6 +99,27 @@ public class PlayerController : MonoBehaviour
     {
         healthBar.value = _currentHealth / maxHealth;  // Update the health bar's value
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Pearl"))
+        {
+            TakeDamage(pearlDamage);
+            GameObject pearl = collision.gameObject;
+            pearlObjectPool.ReturnObjectToPool(pearl);
+        }
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            TakeDamage(enemyDamage);
+        }
+        if (collision.collider.CompareTag("Bubble"))
+        {
+            TakeDamage(pearlDamage);
+            GameObject pearl = collision.gameObject;
+            pearlObjectPool.ReturnObjectToPool(pearl);
+        }
+    }
+
 }
 
 public enum PlayerAnimationNames

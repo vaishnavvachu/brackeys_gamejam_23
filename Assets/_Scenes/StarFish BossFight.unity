@@ -599,13 +599,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3090706166030854817, guid: c9823895bf97109428c23f09c7bdae96,
         type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3090706166030854817, guid: c9823895bf97109428c23f09c7bdae96,
+        type: 3}
       propertyPath: orthographic size
-      value: 3.8333333
+      value: 4.765625
       objectReference: {fileID: 0}
     - target: {fileID: 4949967045699288637, guid: c9823895bf97109428c23f09c7bdae96,
         type: 3}
       propertyPath: m_Name
       value: GlobalObjects
+      objectReference: {fileID: 0}
+    - target: {fileID: 5818050453215076344, guid: c9823895bf97109428c23f09c7bdae96,
+        type: 3}
+      propertyPath: m_RendererIndex
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6301367819104402787, guid: c9823895bf97109428c23f09c7bdae96,
         type: 3}

@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange;
+    [SerializeField] private float maxHealth = 100f; 
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private SpriteAnimator spriteAnimator;
 
@@ -65,7 +66,7 @@ public class PlayerController : MonoBehaviour
         
         if (oxygenController)
         {
-            oxygenController.ReduceOxygenAmount(damage / 100);
+            oxygenController.ReduceOxygenAmount(damage / maxHealth);
         }
     }
 

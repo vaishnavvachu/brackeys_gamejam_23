@@ -45,10 +45,10 @@ public class PlayerController : MonoBehaviour
 
     private void SlashAttack()
     {
+        spriteAnimator.Play(attackAnimationName, idleAnimationName, false);
         var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         foreach (var enemy in hitEnemies)
         {
-            spriteAnimator.Play(attackAnimationName, idleAnimationName, false);
             // Handle damaging the enemy here
         }
     }

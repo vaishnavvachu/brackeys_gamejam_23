@@ -161,12 +161,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 615b789d84d321b4789aef17db1009a4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f60c804cec06741b58c5a88faa945a69, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 1.25}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -237,34 +237,34 @@ MonoBehaviour:
   - name: Idle
     fps: 6
     frames:
-    - {fileID: 21300000, guid: 615b789d84d321b4789aef17db1009a4, type: 3}
-    - {fileID: 21300000, guid: 3822029852e5e5f4a874560a6c060727, type: 3}
-    - {fileID: 21300000, guid: 54c38576850b8524189587a3e3ac7aef, type: 3}
-    - {fileID: 21300000, guid: a54f5ab38ea681449b3522b66339c1ec, type: 3}
-    - {fileID: 21300000, guid: f19800064cc734746830caf834105279, type: 3}
+    - {fileID: 21300000, guid: f60c804cec06741b58c5a88faa945a69, type: 3}
+    - {fileID: 21300000, guid: 74e347af4d1f04debb863e53981f3afa, type: 3}
+    - {fileID: 21300000, guid: 79cbfca43c60649c1a94b2d57846d768, type: 3}
+    - {fileID: 21300000, guid: 8171bdbe6b9f8442cbf3757dd113ed0a, type: 3}
+    - {fileID: 21300000, guid: 781351c49c67345549ca98b652029a22, type: 3}
     triggers: []
   - name: Attack
     fps: 12
     frames:
-    - {fileID: 21300000, guid: 20c14287f956c814db0b912c072d0f14, type: 3}
-    - {fileID: 21300000, guid: f2e3afc868d3d39438e945c6c5db602a, type: 3}
-    - {fileID: 21300000, guid: 0493e9a1f8e6ca74c8eae76c3d8dc9c2, type: 3}
+    - {fileID: 21300000, guid: d4f16ac4c71ec4b1ea445ef50466a43b, type: 3}
+    - {fileID: 21300000, guid: f1840814746754e0382f43631f8f3f41, type: 3}
+    - {fileID: 21300000, guid: 11c105626fe4744c281b780fda2707c0, type: 3}
     triggers: []
   - name: TakeDamage
     fps: 12
     frames:
-    - {fileID: 21300000, guid: ab5c2d41e3e11154b80f52f0da8f3001, type: 3}
-    - {fileID: 21300000, guid: bf251f7b85cf3fd4cb80a47848ec05a1, type: 3}
-    - {fileID: 21300000, guid: c5583a1ba7ff08b4ca04a19fd5f405ee, type: 3}
-    - {fileID: 21300000, guid: 91ffbe5cc30292544835b408bf3073fc, type: 3}
+    - {fileID: 21300000, guid: 70aee62a3dca1488987772384031d50c, type: 3}
+    - {fileID: 21300000, guid: 8e1910b98ee4e4c76ab2abe5e2a86f9e, type: 3}
+    - {fileID: 21300000, guid: 69941e4ad717c4a7fbf00b81e30aae91, type: 3}
+    - {fileID: 21300000, guid: 4eaa5c81f6dcb47b1b8e65d04633821d, type: 3}
     triggers: []
   - name: Die
     fps: 12
     frames:
-    - {fileID: 21300000, guid: 9d5fe1fc4763551468fd408b03c88f63, type: 3}
-    - {fileID: 21300000, guid: 40c9e5a1a6d4cf9488930badcf14f0cb, type: 3}
-    - {fileID: 21300000, guid: 22ff6b0c07faf5a4e80ab5e9931cd915, type: 3}
-    - {fileID: 21300000, guid: 05092251593bedd449766acb14f03974, type: 3}
+    - {fileID: 21300000, guid: 8c2c71e8ccbfb495d8833c2b6586301b, type: 3}
+    - {fileID: 21300000, guid: b43079a1f82464bf7af6af64e78bca30, type: 3}
+    - {fileID: 21300000, guid: 160deba5d82e841a1823b5892866cb89, type: 3}
+    - {fileID: 21300000, guid: 7daafff1cfd83413988687cd282a1224, type: 3}
     triggers: []
   playAnimationOnStart: Idle
 --- !u!114 &6803614787772036050
@@ -354,7 +354,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 2, y: 1.25}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 2, y: 1.25}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

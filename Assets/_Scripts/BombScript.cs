@@ -8,7 +8,7 @@ public class BombScript : MonoBehaviour
 
     private ObjectPool pearlObjectPool;
 
-    private Animator bombAnim;
+    public Animator bombAnim;
 
     private void Awake()
     {

@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: b52b9b5e969e24b2a87246f88b029ce5,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -448,7 +449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 57636219}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Enemies
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3005,7 +3006,7 @@ PrefabInstance:
     - target: {fileID: 3090706166030854817, guid: c9823895bf97109428c23f09c7bdae96,
         type: 3}
       propertyPath: orthographic size
-      value: 3.4375
+      value: 3.78125
       objectReference: {fileID: 0}
     - target: {fileID: 4949967045699288637, guid: c9823895bf97109428c23f09c7bdae96,
         type: 3}

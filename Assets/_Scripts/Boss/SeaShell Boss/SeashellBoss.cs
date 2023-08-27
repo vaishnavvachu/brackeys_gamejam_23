@@ -13,7 +13,7 @@ public class SeashellBoss : MonoBehaviour
     public GameObject pearlPrefab;
     public Transform shootPoint;
     public float shootInterval = 2.0f;
-    public float detectionRange = 5.0f;// Range at which the boss detects the player for shooting
+    public float detectionRange = 5.0f;
     public int projectileSpeed;
     private float nextShootTime;
     private ObjectPool pearlObjectPool;
@@ -104,14 +104,6 @@ public class SeashellBoss : MonoBehaviour
     {
         // Implement boss defeated logic here
         Debug.Log("Boss defeated!");
-
-        // Allow the player to throw bombs
-        PlayerController playerController = player.GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.EnableBombThrowing(); // Implement this method to enable the bomb-throwing ability
-        }
-
         Destroy(gameObject);
     }
 }

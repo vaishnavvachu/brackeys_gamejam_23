@@ -4,6 +4,8 @@ using UnityEngine;
 public class BossBehavior : MonoBehaviour
 {
     [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private GameObject needBombTutorialText;
+    [SerializeField] private GameObject useBombTutorialText;
     private float currentHealth;
 
     //Attack and Movemnt
@@ -186,13 +188,13 @@ public class BossBehavior : MonoBehaviour
         Debug.Log("Boss dealt damage to player.");
     }
 
-    private void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         bossAnimator.SetTrigger("Hit");
         currentHealth -= damage;
         Debug.Log("Boss took " + damage + " damage. Current health: " + currentHealth);
 
-        if(currentHealth <= 50)
+        if (currentHealth <= 50)
         {
             numberOfProjectiles = 8;
         }
@@ -208,5 +210,15 @@ public class BossBehavior : MonoBehaviour
     {
         // Implement boss defeated logic here
         Debug.Log("Boss defeated!");
+
+        // Allow the player to throw bombs
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.EnableBombThrowing(); // Call the EnableBombThrowing method
+            // HACK
+            needBombTutorialText.SetActive(false);
+            useBombTutorialText.SetActive(true);
+        }
     }
 }

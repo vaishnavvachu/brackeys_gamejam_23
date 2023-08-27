@@ -6,11 +6,13 @@ public class OxygenController : MonoBehaviour
 {
     [SerializeField] 
     private float durationToTotallyDeplete = 10f;
+
+    private float defaultDepleteDuration;
     
     private Image oxygenImage;
     private bool oxygenDepleted;
 
-    private float maxAmount = 1f;
+    private float startAmount = 1f;
     
     private float timer;
     
@@ -18,6 +20,7 @@ public class OxygenController : MonoBehaviour
 
     private void Start()
     {
+        defaultDepleteDuration = durationToTotallyDeplete;
         oxygenImage = GetComponent<Image>();
     }
 
@@ -30,8 +33,8 @@ public class OxygenController : MonoBehaviour
     private void ReduceOxygenAmount()
     {
         timer += Time.deltaTime;
-        var progress = Mathf.Clamp01(timer / durationToTotallyDeplete);
-        var currentFill = Mathf.Lerp(maxAmount, 0.0f, progress);
+        var progress = Mathf.Clamp01(timer / (durationToTotallyDeplete));
+        var currentFill = Mathf.Lerp(startAmount, 0.0f, progress);
         if (currentFill <= 0)
         {
             oxygenDepleted = true;
@@ -48,13 +51,15 @@ public class OxygenController : MonoBehaviour
     
     public void ReduceOxygenAmount(float amount)
     {
-        ChangeOxygenAmount(amount);
+        var currentAmount = oxygenImage.fillAmount;
+        ChangeOxygenAmount(currentAmount - amount);
     }
 
     private void ChangeOxygenAmount(float amount)
     {
-        maxAmount = amount;
-        oxygenImage.fillAmount = amount;
+        startAmount = amount;
+        oxygenImage.fillAmount = startAmount;
         timer = 0;
+        durationToTotallyDeplete = defaultDepleteDuration * (startAmount / 1f);
     }
 }

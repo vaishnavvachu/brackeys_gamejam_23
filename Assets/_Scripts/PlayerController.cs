@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         
         if (oxygenController)
         {
-            oxygenController.ReduceOxygenAmount(damage);
+            oxygenController.ReduceOxygenAmount(damage / 100);
         }
     }
 

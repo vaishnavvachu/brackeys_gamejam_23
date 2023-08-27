@@ -4,6 +4,8 @@ using UnityEngine;
 public class BossBehavior : MonoBehaviour
 {
     [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private GameObject needBombTutorialText;
+    [SerializeField] private GameObject useBombTutorialText;
     private float currentHealth;
 
     //Attack and Movemnt
@@ -214,6 +216,9 @@ public class BossBehavior : MonoBehaviour
         if (playerController != null)
         {
             playerController.EnableBombThrowing(); // Call the EnableBombThrowing method
+            // HACK
+            needBombTutorialText.SetActive(false);
+            useBombTutorialText.SetActive(true);
         }
     }
 }

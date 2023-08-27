@@ -92,11 +92,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8354174712189847793}
   - component: {fileID: 1175686443338963972}
-  - component: {fileID: 7529902315577752740}
   - component: {fileID: 8230188745145959352}
   - component: {fileID: 4874827122308265681}
   - component: {fileID: 6803614787772036050}
   - component: {fileID: 6935642209746652842}
+  - component: {fileID: 8529258972187560698}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -118,7 +118,7 @@ Transform:
   m_Children:
   - {fileID: 1352544156574853564}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1175686443338963972
 SpriteRenderer:
@@ -172,27 +172,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7529902315577752740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7906654519343957479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 060329cd44133449e82646dcd782facc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  attackPoint: {fileID: 1352544156574853564}
-  attackRange: 2.5
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  maxHealth: 100
-  healthBar: {fileID: 0}
-  spriteAnimator: {fileID: 4874827122308265681}
 --- !u!50 &8230188745145959352
 Rigidbody2D:
   serializedVersion: 4
@@ -362,3 +341,32 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.64, y: 0.4}
   m_EdgeRadius: 0
+--- !u!114 &8529258972187560698
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7906654519343957479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eafeca704db324916805e134b7d8d281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  attackPoint: {fileID: 1352544156574853564}
+  attackRange: 2
+  maxHealth: 100
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  spriteAnimator: {fileID: 0}
+  restartDuration: 2
+  pearlDamage: 0
+  slashDamage: 0
+  enemyDamage: 0
+  bombDamage: 0
+  bombPrefab: {fileID: 8362152974014352940, guid: 54c99714b8d584ec59a30ee41c46790f,
+    type: 3}
+  throwPoint: {fileID: 0}
+  throwForce: 10

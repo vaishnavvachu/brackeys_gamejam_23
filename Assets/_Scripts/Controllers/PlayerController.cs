@@ -70,14 +70,9 @@ public class PlayerController : MonoBehaviour
             SlashAttack();
         }
 
-        if (Input.GetKeyDown(KeyCode.L))
+        if (canThrowBomb && Input.GetKeyDown(KeyCode.L))
         {
-            BombAttack();
-
-            if (canThrowBomb && Input.GetKeyDown(KeyCode.K))
-            {
-                ThrowBomb();
-            }
+            ThrowBomb();
         }
     }
 
@@ -105,11 +100,6 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-        }
-
-        private void BombAttack()
-        {
-            // Add Bomb logic
         }
 
         public void TakeDamage(float damage)

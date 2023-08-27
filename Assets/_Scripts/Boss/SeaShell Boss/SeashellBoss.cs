@@ -104,6 +104,14 @@ public class SeashellBoss : MonoBehaviour
     {
         // Implement boss defeated logic here
         Debug.Log("Boss defeated!");
+
+        // Allow the player to throw bombs
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.EnableBombThrowing(); // Implement this method to enable the bomb-throwing ability
+        }
+
         Destroy(gameObject);
     }
 }

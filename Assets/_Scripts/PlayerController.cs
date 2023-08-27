@@ -16,6 +16,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int slashDamage;
     [SerializeField] private int enemyDamage;
 
+    //Bomb System
+    private bool canThrowBomb = false;
+    public GameObject bombPrefab; // Reference to the bomb prefab
+    public Transform throwPoint;  // Point from which the bomb is thrown
+    public float throwForce = 10.0f;
+
     private ObjectPool pearlObjectPool;
 
     private float _currentHealth;
@@ -48,6 +54,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.J))
         {
             SlashAttack();
+        }
+
+        if (canThrowBomb && Input.GetKeyDown(KeyCode.K))
+        {
+            ThrowBomb();
         }
     }
 
@@ -98,6 +109,22 @@ public class PlayerController : MonoBehaviour
     private void UpdateHealthBar()
     {
         healthBar.value = _currentHealth / maxHealth;  // Update the health bar's value
+    }
+
+    private void ThrowBomb()
+    {
+        GameObject bomb = Instantiate(bombPrefab, throwPoint.position, throwPoint.rotation);
+        Rigidbody2D bombRigidbody = bomb.GetComponent<Rigidbody2D>();
+        Vector2 throwDirection = throwPoint.right; // Assuming the throwPoint is facing the forward direction
+        bombRigidbody.velocity = throwDirection * throwForce;
+
+        // Handle other logic like updating bomb count, animations, etc.
+    }
+
+    public void EnableBombThrowing()
+    {
+        canThrowBomb = true;
+        // You might want to update UI, show bomb count, or perform other related actions here
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -4,33 +4,41 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-  
-    
     [SerializeField] private int maxHealth = 20;
+    [SerializeField] private float moveDistance = 0.5f; // Adjust this value for the desired distance
     [SerializeField] private float moveDuration = 1f;
-    private Transform _playerTransform;
-    private bool _isMovingRight;
-    private bool _isReadyToShoot = true;
+
     private int _currentHealth;
+
     private void Start()
     {
         MoveEnemy();
         _currentHealth = maxHealth;
     }
-    
-    
+
     private void MoveEnemy()
     {
-        transform.DOMoveY(2f, moveDuration)
+        float initialY = transform.position.y;
+        float targetY = initialY + moveDistance;
+
+        // Move up
+        transform.DOMoveY(targetY, moveDuration / 2)
             .SetEase(Ease.Linear)
-            .SetLoops(-1, LoopType.Yoyo);
+            .OnComplete(() => MoveDown(initialY));
+    }
+
+    private void MoveDown(float initialY)
+    {
+        // Move down
+        transform.DOMoveY(initialY, moveDuration / 2)
+            .SetEase(Ease.Linear)
+            .OnComplete(MoveEnemy);
     }
 
     public void TakeDamage(int damageAmount)
     {
-        
         _currentHealth -= damageAmount;
-        
+
         if (_currentHealth <= 0)
         {
             Die();

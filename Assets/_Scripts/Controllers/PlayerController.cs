@@ -13,6 +13,20 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float restartDuration = 2f;
     
+    //Damae System
+    [SerializeField] private int pearlDamage;
+    [SerializeField] private int slashDamage;
+    [SerializeField] private int enemyDamage;
+
+    //Bomb System
+    private bool canThrowBomb = false;
+    public GameObject bombPrefab; // Reference to the bomb prefab
+    public Transform throwPoint;  // Point from which the bomb is thrown
+    public float throwForce = 10.0f;
+
+    private ObjectPool pearlObjectPool;
+
+    private float _currentHealth;
     private Rigidbody2D _rb2d;
 
     private string attackAnimationName = PlayerAnimationNames.Attack.ToString();
@@ -32,6 +46,11 @@ public class PlayerController : MonoBehaviour
         {
             oxygenController.OnOxygenDepleted += Die;
         }
+        _currentHealth = maxHealth;  // Initialize current health to maximum
+        pearlObjectPool = ObjectPool.instance;
+
+        // TODO: Needs a health bar
+        // UpdateHealthBar();
     }
 
     private void Update()
@@ -52,6 +71,10 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             BombAttack();
+
+        if (canThrowBomb && Input.GetKeyDown(KeyCode.K))
+        {
+            ThrowBomb();
         }
     }
 
@@ -61,7 +84,23 @@ public class PlayerController : MonoBehaviour
         var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
         foreach (var enemy in hitEnemies)
         {
-            // Handle damaging the enemy here
+            Debug.Log("boss damage");
+            if (enemy.CompareTag("Boss")) // Assuming you have a tag for the boss
+            {
+                SeashellBoss boss = enemy.GetComponent<SeashellBoss>();
+                if (boss != null)
+                {
+                    boss.TakeDamage(slashDamage);
+                }
+            }
+            if (enemy.CompareTag("Enemy"))
+            {
+                EnemyController enemys = enemy.GetComponent<EnemyController>();
+                if (enemys != null)
+                {
+                    enemys.TakeDamage(slashDamage);
+                }
+            }
         }
     }
 
@@ -92,6 +131,43 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(duration);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    private void ThrowBomb()
+    {
+        GameObject bomb = Instantiate(bombPrefab, throwPoint.position, throwPoint.rotation);
+        Rigidbody2D bombRigidbody = bomb.GetComponent<Rigidbody2D>();
+        Vector2 throwDirection = throwPoint.right; // Assuming the throwPoint is facing the forward direction
+        bombRigidbody.velocity = throwDirection * throwForce;
+
+        // Handle other logic like updating bomb count, animations, etc.
+    }
+
+    public void EnableBombThrowing()
+    {
+        canThrowBomb = true;
+        // You might want to update UI, show bomb count, or perform other related actions here
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.CompareTag("Pearl"))
+        {
+            TakeDamage(pearlDamage);
+            GameObject pearl = collision.gameObject;
+            pearlObjectPool.ReturnObjectToPool(pearl);
+        }
+        if (collision.collider.CompareTag("Enemy"))
+        {
+            TakeDamage(enemyDamage);
+        }
+        if (collision.collider.CompareTag("Bubble"))
+        {
+            TakeDamage(pearlDamage);
+            GameObject pearl = collision.gameObject;
+            pearlObjectPool.ReturnObjectToPool(pearl);
+        }
+    }
+
 }
 
 public enum PlayerAnimationNames

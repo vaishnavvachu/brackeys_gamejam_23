@@ -7,12 +7,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange;
-    [SerializeField] private float maxHealth = 100f; 
+    [SerializeField] private float maxHealth = 100f;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private SpriteAnimator spriteAnimator;
 
     [SerializeField] private float restartDuration = 2f;
-    
+
     //Damae System
     [SerializeField] private int pearlDamage;
     [SerializeField] private int slashDamage;
@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private string idleAnimationName = PlayerAnimationNames.Idle.ToString();
     private string takeDamageAnimationName = PlayerAnimationNames.TakeDamage.ToString();
     private string dieAnimationName = PlayerAnimationNames.Die.ToString();
-    
+
     private bool playerAlive = true;
     private OxygenController oxygenController;
 
@@ -56,6 +56,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (!playerAlive) { return; }
+
         var horizontalInput = Input.GetAxis("Horizontal");
         var verticalInput = Input.GetAxis("Vertical");
 
@@ -67,109 +68,109 @@ public class PlayerController : MonoBehaviour
         {
             SlashAttack();
         }
-        
+
         if (Input.GetKeyDown(KeyCode.L))
         {
             BombAttack();
 
-        if (canThrowBomb && Input.GetKeyDown(KeyCode.K))
-        {
-            ThrowBomb();
+            if (canThrowBomb && Input.GetKeyDown(KeyCode.K))
+            {
+                ThrowBomb();
+            }
         }
     }
 
     private void SlashAttack()
-    {
-        spriteAnimator.Play(attackAnimationName, idleAnimationName, false);
-        var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
-        foreach (var enemy in hitEnemies)
         {
-            Debug.Log("boss damage");
-            if (enemy.CompareTag("Boss")) // Assuming you have a tag for the boss
+            spriteAnimator.Play(attackAnimationName, idleAnimationName, false);
+            var hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayer);
+            foreach (var enemy in hitEnemies)
             {
-                SeashellBoss boss = enemy.GetComponent<SeashellBoss>();
-                if (boss != null)
+                Debug.Log("boss damage");
+                if (enemy.CompareTag("Boss")) // Assuming you have a tag for the boss
                 {
-                    boss.TakeDamage(slashDamage);
+                    SeashellBoss boss = enemy.GetComponent<SeashellBoss>();
+                    if (boss != null)
+                    {
+                        boss.TakeDamage(slashDamage);
+                    }
+                }
+                if (enemy.CompareTag("Enemy"))
+                {
+                    EnemyController enemys = enemy.GetComponent<EnemyController>();
+                    if (enemys != null)
+                    {
+                        enemys.TakeDamage(slashDamage);
+                    }
                 }
             }
-            if (enemy.CompareTag("Enemy"))
+        }
+
+        private void BombAttack()
+        {
+            // Add Bomb logic
+        }
+
+        public void TakeDamage(float damage)
+        {
+            spriteAnimator.Play(takeDamageAnimationName, idleAnimationName, false);
+
+            if (oxygenController)
             {
-                EnemyController enemys = enemy.GetComponent<EnemyController>();
-                if (enemys != null)
-                {
-                    enemys.TakeDamage(slashDamage);
-                }
+                oxygenController.ReduceOxygenAmount(damage / maxHealth);
             }
         }
-    }
 
-    private void BombAttack()
-    {
-        // Add Bomb logic
-    }
-    
-    public void TakeDamage(float damage)
-    {
-        spriteAnimator.Play(takeDamageAnimationName, idleAnimationName, false);
-        
-        if (oxygenController)
+        private void Die()
         {
-            oxygenController.ReduceOxygenAmount(damage / maxHealth);
+            spriteAnimator.Play(dieAnimationName, "", false);
+            playerAlive = false;
+            StartCoroutine(RestartGame(restartDuration));
         }
-    }
 
-    private void Die()
-    {
-        spriteAnimator.Play(dieAnimationName, "", false);
-        playerAlive = false;
-        StartCoroutine(RestartGame(restartDuration));
-    }
-    
-    private IEnumerator RestartGame(float duration)
-    {
-        yield return new WaitForSeconds(duration);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    private void ThrowBomb()
-    {
-        GameObject bomb = Instantiate(bombPrefab, throwPoint.position, throwPoint.rotation);
-        Rigidbody2D bombRigidbody = bomb.GetComponent<Rigidbody2D>();
-        Vector2 throwDirection = throwPoint.right; // Assuming the throwPoint is facing the forward direction
-        bombRigidbody.velocity = throwDirection * throwForce;
-
-        // Handle other logic like updating bomb count, animations, etc.
-    }
-
-    public void EnableBombThrowing()
-    {
-        canThrowBomb = true;
-        // You might want to update UI, show bomb count, or perform other related actions here
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.collider.CompareTag("Pearl"))
+        private IEnumerator RestartGame(float duration)
         {
-            TakeDamage(pearlDamage);
-            GameObject pearl = collision.gameObject;
-            pearlObjectPool.ReturnObjectToPool(pearl);
+            yield return new WaitForSeconds(duration);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-        if (collision.collider.CompareTag("Enemy"))
+
+        private void ThrowBomb()
         {
-            TakeDamage(enemyDamage);
+            GameObject bomb = Instantiate(bombPrefab, throwPoint.position, throwPoint.rotation);
+            Rigidbody2D bombRigidbody = bomb.GetComponent<Rigidbody2D>();
+            Vector2 throwDirection = throwPoint.right; // Assuming the throwPoint is facing the forward direction
+            bombRigidbody.velocity = throwDirection * throwForce;
+
+            // Handle other logic like updating bomb count, animations, etc.
         }
-        if (collision.collider.CompareTag("Bubble"))
+
+        public void EnableBombThrowing()
         {
-            TakeDamage(pearlDamage);
-            GameObject pearl = collision.gameObject;
-            pearlObjectPool.ReturnObjectToPool(pearl);
+            canThrowBomb = true;
+            // You might want to update UI, show bomb count, or perform other related actions here
         }
-    }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.collider.CompareTag("Pearl"))
+            {
+                TakeDamage(pearlDamage);
+                GameObject pearl = collision.gameObject;
+                pearlObjectPool.ReturnObjectToPool(pearl);
+            }
+            if (collision.collider.CompareTag("Enemy"))
+            {
+                TakeDamage(enemyDamage);
+            }
+            if (collision.collider.CompareTag("Bubble"))
+            {
+                TakeDamage(pearlDamage);
+                GameObject pearl = collision.gameObject;
+                pearlObjectPool.ReturnObjectToPool(pearl);
+            }
+        }
 
 }
-
 public enum PlayerAnimationNames
 {
     Idle,

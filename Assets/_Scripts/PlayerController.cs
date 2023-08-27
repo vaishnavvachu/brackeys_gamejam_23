@@ -48,6 +48,11 @@ public class PlayerController : MonoBehaviour
         {
             SlashAttack();
         }
+        
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            BombAttack();
+        }
     }
 
     private void SlashAttack()
@@ -60,6 +65,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void BombAttack()
+    {
+        // Add Bomb logic
+    }
+    
     public void TakeDamage(float damage)
     {
         spriteAnimator.Play(takeDamageAnimationName, idleAnimationName, false);

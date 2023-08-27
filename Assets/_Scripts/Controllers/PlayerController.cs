@@ -131,17 +131,18 @@ public class PlayerController : MonoBehaviour
             BombScript bombScript = bomb.GetComponent<BombScript>(); // Replace "BombScript" with your actual bomb script name
             bombScript.InitializeBomb(bombDamage, throwForce);
             bomb.transform.position = throwPoint.position;
+            bombScript.bombAnim.SetBool("Explode", true);
             bomb.SetActive(true);
         }
 
 
     public void EnableBombThrowing()
-        {
-            canThrowBomb = true;
-            // You might want to update UI, show bomb count, or perform other related actions here
-        }
+    {
+        canThrowBomb = true;
+        // You might want to update UI, show bomb count, or perform other related actions here  
+    }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.collider.CompareTag("Pearl"))
             {

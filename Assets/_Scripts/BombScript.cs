@@ -8,6 +8,8 @@ public class BombScript : MonoBehaviour
 
     private ObjectPool pearlObjectPool;
 
+    private Animator bombAnim;
+
     private void Awake()
     {
         pearlObjectPool = ObjectPool.instance; // Get the object pool reference
@@ -17,6 +19,7 @@ public class BombScript : MonoBehaviour
     {
         damage = bombDamage;
         throwForce = bombThrowForce;
+        bombAnim.SetBool("Active", true);
     }
 
     private void Start()
@@ -24,6 +27,7 @@ public class BombScript : MonoBehaviour
         Rigidbody2D bombRigidbody = GetComponent<Rigidbody2D>();
         Vector2 throwDirection = transform.right;
         bombRigidbody.velocity = throwDirection * throwForce;
+        bombAnim = GetComponent<Animator>();
 
         // Additional initialization if needed
     }
@@ -39,7 +43,7 @@ public class BombScript : MonoBehaviour
             }
         }
 
-        if(collision.collider.CompareTag("Enemy"))
+        if(collision.collider.CompareTag("Boss"))
         {
             BossBehavior boss = collision.collider.GetComponent<BossBehavior>();
             if (boss != null)

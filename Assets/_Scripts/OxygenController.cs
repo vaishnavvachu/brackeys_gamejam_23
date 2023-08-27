@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class OxygenController : MonoBehaviour
@@ -38,5 +37,11 @@ public class OxygenController : MonoBehaviour
             oxygenImage.fillAmount = 0;
         }
         else { oxygenImage.fillAmount = currentFill; }
+    }
+
+    public void RefillOxygen()
+    {
+        oxygenImage.fillAmount = 1;
+        timer = 0;
     }
 }

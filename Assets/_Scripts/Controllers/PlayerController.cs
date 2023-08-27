@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int pearlDamage;
     [SerializeField] private int slashDamage;
     [SerializeField] private int enemyDamage;
+    [SerializeField] private int bombDamage;
 
     //Bomb System
     private bool canThrowBomb = false;
@@ -136,15 +137,15 @@ public class PlayerController : MonoBehaviour
 
         private void ThrowBomb()
         {
-            GameObject bomb = Instantiate(bombPrefab, throwPoint.position, throwPoint.rotation);
-            Rigidbody2D bombRigidbody = bomb.GetComponent<Rigidbody2D>();
-            Vector2 throwDirection = throwPoint.right; // Assuming the throwPoint is facing the forward direction
-            bombRigidbody.velocity = throwDirection * throwForce;
-
-            // Handle other logic like updating bomb count, animations, etc.
+            GameObject bomb = pearlObjectPool.GetObjectFromPool();
+            BombScript bombScript = bomb.GetComponent<BombScript>(); // Replace "BombScript" with your actual bomb script name
+            bombScript.InitializeBomb(bombDamage, throwForce);
+            bomb.transform.position = throwPoint.position;
+            bomb.SetActive(true);
         }
 
-        public void EnableBombThrowing()
+
+    public void EnableBombThrowing()
         {
             canThrowBomb = true;
             // You might want to update UI, show bomb count, or perform other related actions here

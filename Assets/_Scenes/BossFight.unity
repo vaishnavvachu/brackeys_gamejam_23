@@ -728,6 +728,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4979471970998642757, guid: c9823895bf97109428c23f09c7bdae96,
         type: 3}
+      propertyPath: bombPrefab
+      value: 
+      objectReference: {fileID: 8362152974014352940, guid: 54c99714b8d584ec59a30ee41c46790f,
+        type: 3}
+    - target: {fileID: 4979471970998642757, guid: c9823895bf97109428c23f09c7bdae96,
+        type: 3}
       propertyPath: pearlDamage
       value: 5
       objectReference: {fileID: 0}

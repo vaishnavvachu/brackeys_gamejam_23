@@ -1,5 +1,5 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class OxygenController : MonoBehaviour
@@ -10,9 +10,11 @@ public class OxygenController : MonoBehaviour
     private Image oxygenImage;
     private bool oxygenDepleted;
 
+    private float maxAmount = 1f;
+    
     private float timer;
     
-    public UnityEvent onOxygenDepleted;
+    public event Action OnOxygenDepleted;
 
     private void Start()
     {
@@ -29,11 +31,11 @@ public class OxygenController : MonoBehaviour
     {
         timer += Time.deltaTime;
         var progress = Mathf.Clamp01(timer / durationToTotallyDeplete);
-        var currentFill = Mathf.Lerp(1.0f, 0.0f, progress);
+        var currentFill = Mathf.Lerp(maxAmount, 0.0f, progress);
         if (currentFill <= 0)
         {
             oxygenDepleted = true;
-            onOxygenDepleted?.Invoke();
+            OnOxygenDepleted?.Invoke();
             oxygenImage.fillAmount = 0;
         }
         else { oxygenImage.fillAmount = currentFill; }
@@ -41,7 +43,18 @@ public class OxygenController : MonoBehaviour
 
     public void RefillOxygen()
     {
-        oxygenImage.fillAmount = 1;
+        ChangeOxygenAmount(1);
+    }
+    
+    public void ReduceOxygenAmount(float amount)
+    {
+        ChangeOxygenAmount(amount);
+    }
+
+    private void ChangeOxygenAmount(float amount)
+    {
+        maxAmount = amount;
+        oxygenImage.fillAmount = amount;
         timer = 0;
     }
 }

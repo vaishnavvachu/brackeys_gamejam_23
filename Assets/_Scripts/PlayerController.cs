@@ -1,5 +1,6 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -7,11 +8,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange;
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private float maxHealth = 100f; 
-    [SerializeField] private Slider healthBar;
     [SerializeField] private SpriteAnimator spriteAnimator;
+
+    [SerializeField] private float restartDuration = 2f;
     
-    private float _currentHealth;
     private Rigidbody2D _rb2d;
 
     private string attackAnimationName = PlayerAnimationNames.Attack.ToString();
@@ -19,17 +19,23 @@ public class PlayerController : MonoBehaviour
     private string takeDamageAnimationName = PlayerAnimationNames.TakeDamage.ToString();
     private string dieAnimationName = PlayerAnimationNames.Die.ToString();
     
+    private bool playerAlive = true;
+    private OxygenController oxygenController;
+
     private void Start()
     {
         _rb2d = GetComponent<Rigidbody2D>();
-        _currentHealth = maxHealth;  // Initialize current health to maximum
-        
-        // TODO: Needs a health bar
-        // UpdateHealthBar();
+
+        oxygenController = FindObjectOfType<OxygenController>();
+        if (oxygenController)
+        {
+            oxygenController.OnOxygenDepleted += Die;
+        }
     }
 
     private void Update()
     {
+        if (!playerAlive) { return; }
         var horizontalInput = Input.GetAxis("Horizontal");
         var verticalInput = Input.GetAxis("Vertical");
 
@@ -55,25 +61,25 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        _currentHealth -= damage;
         spriteAnimator.Play(takeDamageAnimationName, idleAnimationName, false);
-        //UpdateHealthBar();
-
-        if (_currentHealth <= 0)
+        
+        if (oxygenController)
         {
-            Die();
+            oxygenController.ReduceOxygenAmount(damage);
         }
     }
 
     private void Die()
     {
         spriteAnimator.Play(dieAnimationName, "", false);
-        // Handle player's death here
+        playerAlive = false;
+        StartCoroutine(RestartGame(restartDuration));
     }
-
-    private void UpdateHealthBar()
+    
+    private IEnumerator RestartGame(float duration)
     {
-        healthBar.value = _currentHealth / maxHealth;  // Update the health bar's value
+        yield return new WaitForSeconds(duration);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
 
